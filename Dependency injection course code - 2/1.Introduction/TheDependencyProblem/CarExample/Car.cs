@@ -2,8 +2,13 @@
 
 public class Car
 {
-    private readonly PetrolEngine _carEngine = new();
+    private readonly ICarEngine _carEngine;
 
+    public Car(ICarEngine carEngine)
+    {
+        _carEngine = carEngine;
+    }
+    
     public void StartEngine()
     {
         _carEngine.Start();
@@ -12,7 +17,28 @@ public class Car
     //More methods
 }
 
-public class PetrolEngine
+public interface ICarEngine
+{
+    void Start();
+}
+
+public class TestEngine : ICarEngine
+{
+    public void Start()
+    {
+        // test engine
+    }
+}
+
+public class PetrolEngine : ICarEngine
+{
+    public void Start()
+    {
+        //Battery, induction coil, spark plug, fuel
+    }
+}
+
+public class DieselEngine : ICarEngine
 {
     public void Start()
     {

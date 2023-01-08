@@ -3,7 +3,12 @@ using Microsoft.Data.Sqlite;
 
 namespace TheDependencyProblem.Data;
 
-public class SqliteDbConnectionFactory
+public interface IDbConnectionFactory
+{
+    Task<IDbConnection> CreateDbConnectionAsync();
+}
+
+public class SqliteDbConnectionFactory : IDbConnectionFactory
 {
     private readonly DbConnectionOptions _connectionOptions;
 
