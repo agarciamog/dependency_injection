@@ -9,3 +9,9 @@ On the other hand, the composition is about the association of objects of differ
 
 ### Composition Over Inheritance
 The main problem with inheritance is that it may lead to a deep hierarchy of classes. This hierarchy is fragile, and the implementation of derived classes can break or be forced to change with any change at the top of the hierarchy.
+
+## ServiceCollection
+A list of service descriptors that describes a service with its service type, implementation, and lifetime.
+
+## ServiceProvider
+The dependency engine, it knows how to resolve registered services.

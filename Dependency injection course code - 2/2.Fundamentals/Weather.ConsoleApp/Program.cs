@@ -11,9 +11,9 @@ if (args.Length == 0)
 var services = new ServiceCollection();
 
 services.AddSingleton<IWeatherService, OpenWeatherService>();
-//services.AddSingleton<Application>();
+services.AddSingleton<Application>();
 
-var serviceProvider = services.BuildServiceProvider();
+ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 var app = serviceProvider.GetService<Application>();
 var application = serviceProvider.GetRequiredService<Application>();
