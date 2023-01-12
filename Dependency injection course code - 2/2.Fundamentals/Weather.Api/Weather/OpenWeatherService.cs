@@ -4,7 +4,7 @@ namespace Weather.Api.Weather;
 
 public class OpenWeatherService : IWeatherService
 {
-    private const string OpenWeatherApiKey = "f539ebbe9ad5228403f6c267b7b7743c";
+    private const string OpenWeatherApiKey = "4db8949893a8814dea9bf7cca5206b86";
     private readonly IHttpClientFactory _httpClientFactory;
 
     public OpenWeatherService(IHttpClientFactory httpClientFactory)

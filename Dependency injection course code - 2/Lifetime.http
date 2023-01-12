@@ -1,0 +1,8 @@
+GET https://localhost:5001/weather/seattle
+Accept: application/json
+
+###
+GET https://localhost:5001/lifetime
+Accept: application/json
+
+###

@@ -14,4 +14,20 @@ The main problem with inheritance is that it may lead to a deep hierarchy of cla
 A list of service descriptors that describes a service with its service type, implementation, and lifetime.
 
 ## ServiceProvider
-The dependency engine, it knows how to resolve registered services.
+The dependency engine, it knows how to resolve registered services. Use `provider.GetRequiredService<T>()` over `provider.GetService<T>()`
+
+Manual use of DI with GetRequiredService
+```
+builder.Services.AddScoped<T>( provider => {
+    var serviceA = provider.GetRequiredService<A>();
+    var serviceB = provider.GetRequiredService<B>();
+    
+    return new T(serviceA, serviceB);
+});
+```
+
+## Life Cycle
+- Transient: created each time they are requested
+- Scoped: created once per request
+- Singleton: created once per service lifetime
+

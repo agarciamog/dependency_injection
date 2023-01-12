@@ -1,3 +1,4 @@
+using Weather.Api.Filter;
 using Weather.Api.Service;
 using Weather.Api.Weather;
 
@@ -11,7 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<IWeatherService, OpenWeatherService>();
-builder.Services.AddScoped<IdGenerator>();
+builder.Services.AddSingleton<IdGenerator>();
+builder.Services.AddScoped<LifetimeIndicatorFilter>();
 // ConfigureService Ends
 
 var app = builder.Build();
