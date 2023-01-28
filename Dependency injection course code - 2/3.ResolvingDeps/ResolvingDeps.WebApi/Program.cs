@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Resolving dependencies in service registration
 builder.Services.AddScoped(provider =>
 {
     var logger = provider.GetRequiredService<ILogger<DurationLoggerFilter>>();
