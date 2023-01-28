@@ -1,4 +1,4 @@
-# Notes
+ # Notes
 
 ## Composition vs Inheritance
 
@@ -16,8 +16,8 @@ A list of service descriptors that describes a service with its service type, im
 ## ServiceProvider
 The dependency engine, it knows how to resolve registered services. Use `provider.GetRequiredService<T>()` over `provider.GetService<T>()`
 
-Manual use of DI with GetRequiredService
-```
+1. Manual use of DI with GetRequiredService
+```csharp
 builder.Services.AddScoped<T>( provider => {
     var serviceA = provider.GetRequiredService<A>();
     var serviceB = provider.GetRequiredService<B>();
@@ -25,7 +25,17 @@ builder.Services.AddScoped<T>( provider => {
     return new T(serviceA, serviceB);
 });
 ```
+2. Get ServiceProvider using HttpContext (anti-pattern)
+```csharp
+[HttpGet("weather")]
+public IEnumerable<WeatherForecast> Get(string city)
+{
+    IServiceProvider provider = HttpContext.RequestServices;
+    var myService = provider.GetRequiredService<IMyService>();
 
+    return myService.GetWeather(city);
+}
+```
 ## Life Cycle
 - Transient: created each time they are requested
 - Scoped: created once per request
