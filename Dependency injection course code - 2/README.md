@@ -41,3 +41,57 @@ public IEnumerable<WeatherForecast> Get(string city)
 - Scoped: created once per request
 - Singleton: created once per service lifetime
 
+## Registering Multiple Interface Implementations
+If you don't implement IEnumerable in CTOR then you'll get the last registered service, InMemoryWeatherService.
+```csharp
+builder.Services.AddTransient<IWeatherService, OpenWeatherService>();
+builder.Services.AddTransient<IWeatherService, InMemoryWeatherService>();
+```
+```csharp
+private readonly IEnumerable<IWeatherService> _weatherServices
+
+public MyClassCtor(IEnumerable<IWeatherService> weatherServices)
+{
+    _weatherServices = weatherServices;
+    var firstWeatherService = weatherServices.First();
+}
+```
+
+## The ServiceDescriptor
+How a service should be registered with IoC container. Describes a service with its service type, implementation, and lifetime.
+```csharp
+builder.Services.AddTransient<IWeatherService, OpenWeatherService>();
+
+// Without the syntatic sugar
+var weatherServiceDescriptorA = new ServiceDescriptor
+(
+    typeof(IweatherService),
+    typeof(OpenWeatherService),
+    ServiceLifetime.Transient 
+)
+builder.Services.Add(weatherServiceDescriptorA);
+
+var weatherServiceDescriptorB = 
+    new ServiceDescriptor(
+        typeof(IWeatherService), 
+        provider => { 
+            return new OpenWeatherService(provider.GetRequiredService<IHttpClientFactory>());
+        },
+        ServiceLifetime.Transient
+    );
+    
+builder.Services.Add(weatherServiceDescriptorB);
+```
+## TryAdd
+Add service, if one already exits then it is not added to IoC container
+
+## TryAddEnumerable
+Use TryAddEnumerable when registering a service implementation of a service type that supports multiple registrations of the same service type. Using Add is not idempotent and can add duplicate ServiceDescriptor instances if called twice. Using TryAddEnumerable will prevent registration of multiple implementation types.
+```csharp
+builder.Services.TryAddEnumerable(
+    new []{ 
+        openWeatherServiceDiscriptor,
+        inMemoryWeatherServiceDescriptor
+    }); 
+```
+## 
