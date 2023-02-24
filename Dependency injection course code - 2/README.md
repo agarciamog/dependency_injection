@@ -123,3 +123,12 @@ using (var serviceScope = serviceScopeFactory.CreateScope())
 A Service Locator supplies application components outside the Composition Root with access to an unbounded set of Dependencies. Basically, using a service locator rather than DI in constructor.
 
 This anti-pattern makes it hard to tests and intent can't be easily understood from constructor, you'll have to look at source code.
+
+> #### Assembly Scanning
+> A pattern that describes the automatic registration of one or more dependencies within your application.
+>
+> Assembly scanning is very powerful when you need to bulk register your dependencies without having to explicitly register each instance. By following some convention, your code will be automatically connected with your application without any developer intervention. This can improve consistency in your application and improve developer productivity.
+>
+> See [Nick's example](https://nickchapsas.com/courses/1610935/lectures/36911120) and [this example](https://medium.com/pragmatic-programming/net-things-assembly-scanning-bd4330d9d0a9) on the Assembly Scanning pattern that uses the Service Locator Anti-Pattern.
+
+
