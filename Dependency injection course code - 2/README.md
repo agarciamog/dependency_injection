@@ -1,4 +1,4 @@
- # Notes
+# Notes
 
 ## Composition vs Inheritance
 
@@ -25,7 +25,7 @@ builder.Services.AddScoped<T>( provider => {
     return new T(serviceA, serviceB);
 });
 ```
-2. Get ServiceProvider using HttpContext (anti-pattern)
+2. Get ServiceProvider using HttpContext (service locator anti-pattern)
 ```csharp
 [HttpGet("weather")]
 public IEnumerable<WeatherForecast> Get(string city)
@@ -94,4 +94,32 @@ builder.Services.TryAddEnumerable(
         inMemoryWeatherServiceDescriptor
     }); 
 ```
-## 
+## Creating Custom Scope
+Define a custom scope in another thread or console app
+```csharp
+var services = new ServiceCollection();
+
+services.AddScoped<ExampleService>();
+
+var serviceProvider = services.BuildServiceProvider();
+
+// Use IServiceScopeFactory
+var serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+
+using (var serviceScope = serviceScopeFactory.CreateScope())
+{
+   var service1 = serviceScope.ServiceProvider.GetRequiredService<ExampleService>();
+   Console.WriteLine(service1.Id);
+}
+
+using (var serviceScope = serviceScopeFactory.CreateScope())
+{
+   var service2 = serviceScope.ServiceProvider.GetRequiredService<ExampleService>();
+   Console.WriteLine(service2.Id);
+}
+```
+
+## Service Locator Anti-Pattern
+A Service Locator supplies application components outside the Composition Root with access to an unbounded set of Dependencies. Basically, using a service locator rather than DI in constructor.
+
+This anti-pattern makes it hard to tests and intent can't be easily understood from constructor, you'll have to look at source code.
