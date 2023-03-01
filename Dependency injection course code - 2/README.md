@@ -131,4 +131,48 @@ This anti-pattern makes it hard to tests and intent can't be easily understood f
 >
 > See [Nick's example](https://nickchapsas.com/courses/1610935/lectures/36911120) and [this example](https://medium.com/pragmatic-programming/net-things-assembly-scanning-bd4330d9d0a9) on the Assembly Scanning pattern that uses the Service Locator Anti-Pattern.
 
+## Creating Wrapper-Decorators with DI
+This example creates a wrapper decorator around a service for adding benchmarking.
 
+`LoggedWeatherSevice` will get injected by controller, and `OpenWeatherService` will be injected in `LoggedWeatherService`.
+```csharp
+builder.Services.AddTransient<OpenWeatherService>();
+builder.Services.AddTransient<IWeatherService>(provider =>
+{
+    return new LoggedWeatherService(
+        provider.GetRequiredService<OpenWeatherService>(),
+        provider.GetRequiredService<ILogger<IWeatherService>>()
+    );
+});
+```
+
+```csharp
+public class LoggedWeatherService : IWeatherService
+{
+    private readonly IWeatherService _weatherService;
+    private readonly ILogger<IWeatherService> _logger;
+    
+    public LoggedWeatherService(IWeatherService weatherService, 
+        ILogger<IWeatherService> logger)
+    {
+        _weatherService = weatherService;
+        _logger = logger;
+    }
+    public async Task<WeatherResponse?> GetCurrentWeatherAsync(string city)
+    {
+        var sw = Stopwatch.StartNew();
+        try
+        {
+            return await _weatherService.GetCurrentWeatherAsync(city);
+        }
+        finally
+        {
+            sw.Stop();
+            _logger.LogInformation(
+                "Time elapsed: {0}ms", sw.ElapsedMilliseconds);
+        }
+    }
+}
+```
+
+## 
